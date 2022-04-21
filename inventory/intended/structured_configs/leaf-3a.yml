@@ -1,0 +1,172 @@
+router_bgp:
+  as: '65103'
+  router_id: 1.1.1.11
+  bgp_defaults:
+  - no bgp default ipv4-unicast
+  - distance bgp 20 200 200
+  - graceful-restart restart-time 300
+  - graceful-restart
+  - maximum-paths 4 ecmp 4
+  peer_groups:
+    IPv4-UNDERLAY-PEERS:
+      type: ipv4
+      password: 7x4B4rnJhZB438m9+BrBfQ==
+      maximum_routes: 12000
+      send_community: all
+    EVPN-OVERLAY-PEERS:
+      type: evpn
+      update_source: Loopback0
+      bfd: true
+      ebgp_multihop: '3'
+      password: 7x4B4rnJhZB438m9+BrBfQ==
+      send_community: all
+      maximum_routes: 0
+  address_family_ipv4:
+    peer_groups:
+      IPv4-UNDERLAY-PEERS:
+        activate: true
+      EVPN-OVERLAY-PEERS:
+        activate: false
+  redistribute_routes:
+    connected:
+      route_map: RM-CONN-2-BGP
+  neighbors:
+    172.31.1.0:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65001'
+      description: spine-1_Ethernet5
+    172.31.1.2:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65001'
+      description: spine-2_Ethernet5
+    1.1.1.1:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: spine-1
+      remote_as: '65001'
+    1.1.1.2:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: spine-2
+      remote_as: '65001'
+  address_family_evpn:
+    peer_groups:
+      EVPN-OVERLAY-PEERS:
+        activate: true
+static_routes:
+- vrf: MGMT
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 192.168.255.1
+service_routing_protocols_model: multi-agent
+ip_routing: true
+daemon_terminattr:
+  cvaddrs:
+  - cvp.lab.local:9910
+  cvauth:
+    method: key
+    key: arista
+  cvvrf: MGMT
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: false
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+name_server:
+  source:
+    vrf: MGMT
+  nodes:
+  - 192.168.255.110
+spanning_tree:
+  mode: mstp
+  mst_instances:
+    '0':
+      priority: 32768
+local_users:
+  admin:
+    privilege: 15
+    role: Administrator
+    sha512_password: $6$XiiRNgJOU/Yyz4Xk$rr8JTkAVL/fgU5rm0Bx1Qt0rbl.kN4IedmTzbdDbFe/DKvQHWWFYp6Ax1j4nWOCfgj.vI69VewFpYFeXjTnwt.
+  automator:
+    privilege: 15
+    role: network-admin
+    no_password: true
+    ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABgQC7prl32xxTUtfElkOxFO6DMwS9Jdkdv4KeK9R078Le30YK+xwmgkUZBcvEhZd5ddfcoJIOrUB44agRxGBDjykt1vnWY4lDQnhN6FeE5kbDhT9jIz7LCtf7zy+TFM4+2ugmRA7BooVhFBIlQGZXI67vwtx1JmjhS50jJIlDCf9nnSDCT2RfHyZnCu+B0NID4Z28nbYSerT/CMaJU0yyZA/Vk8dkKJQni0BFvBs/7O8YJV4yhjXXsXKK0iI74dtRnxgR6hiUvmhg5WR8VZgcECu0q1Uji91nYRTWOOyEjFQQsFcRREFG6lrNdLkCnPmwwC0mLi5BFAv5QzU4JRwnb5j+nluxjeib/iVn6uKmVG40Lb1ktnK8BqducOWBgnrwZzg+brfThBhqr6SVz20GWwwmIHsOrlgGxjbJEFmCdGD3BpklKTZ7UIzPLbzt80ZHg1xxuBGh07D/nS8k9qwm7v8bGup8JJzFbhb/wLK8Ykhs2I2dIKo3kFccVR9+20m+7YU=
+      arista@srvr2
+clock:
+  timezone: Denver
+vrfs:
+  MGMT:
+    ip_routing: false
+management_interfaces:
+  Management0:
+    description: oob_management
+    shutdown: false
+    vrf: MGMT
+    ip_address: 192.168.255.165/24
+    gateway: 192.168.255.1
+    type: oob
+management_api_http:
+  enable_vrfs:
+    MGMT: {}
+  enable_https: true
+ethernet_interfaces:
+  Ethernet1:
+    peer: spine-1
+    peer_interface: Ethernet5
+    peer_type: spine
+    description: P2P_LINK_TO_SPINE-1_Ethernet5
+    mtu: 1500
+    ptp:
+      enable: true
+    type: routed
+    shutdown: false
+    ip_address: 172.31.1.1/31
+  Ethernet2:
+    peer: spine-2
+    peer_interface: Ethernet5
+    peer_type: spine
+    description: P2P_LINK_TO_SPINE-2_Ethernet5
+    mtu: 1500
+    ptp:
+      enable: true
+    type: routed
+    shutdown: false
+    ip_address: 172.31.1.3/31
+loopback_interfaces:
+  Loopback0:
+    description: EVPN_Overlay_Peering
+    shutdown: false
+    ip_address: 1.1.1.11/32
+  Loopback1:
+    description: VTEP_VXLAN_Tunnel_Source
+    shutdown: false
+    ip_address: 2.2.2.11/32
+prefix_lists:
+  PL-LOOPBACKS-EVPN-OVERLAY:
+    sequence_numbers:
+      10:
+        action: permit 1.1.1.0/24 eq 32
+      20:
+        action: permit 2.2.2.0/24 eq 32
+route_maps:
+  RM-CONN-2-BGP:
+    sequence_numbers:
+      10:
+        type: permit
+        match:
+        - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+router_bfd:
+  multihop:
+    interval: 1200
+    min_rx: 1200
+    multiplier: 3
+ip_igmp_snooping:
+  globally_enabled: true
+ip_virtual_router_mac_address: 00:1c:73:aa:bb:cc
+vxlan_interface:
+  Vxlan1:
+    description: leaf-3a_VTEP
+    vxlan:
+      source_interface: Loopback1
+      udp_port: 4789

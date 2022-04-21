@@ -1,0 +1,254 @@
+router_bgp:
+  as: '65102'
+  router_id: 1.1.1.11
+  bgp_defaults:
+  - no bgp default ipv4-unicast
+  - distance bgp 20 200 200
+  - graceful-restart restart-time 300
+  - graceful-restart
+  - maximum-paths 4 ecmp 4
+  peer_groups:
+    MLAG-IPv4-UNDERLAY-PEER:
+      type: ipv4
+      remote_as: '65102'
+      next_hop_self: true
+      password: 7x4B4rnJhZB438m9+BrBfQ==
+      maximum_routes: 12000
+      send_community: all
+      route_map_in: RM-MLAG-PEER-IN
+    IPv4-UNDERLAY-PEERS:
+      type: ipv4
+      password: 7x4B4rnJhZB438m9+BrBfQ==
+      maximum_routes: 12000
+      send_community: all
+    EVPN-OVERLAY-PEERS:
+      type: evpn
+      update_source: Loopback0
+      bfd: true
+      ebgp_multihop: '3'
+      password: 7x4B4rnJhZB438m9+BrBfQ==
+      send_community: all
+      maximum_routes: 0
+  address_family_ipv4:
+    peer_groups:
+      MLAG-IPv4-UNDERLAY-PEER:
+        activate: true
+      IPv4-UNDERLAY-PEERS:
+        activate: true
+      EVPN-OVERLAY-PEERS:
+        activate: false
+  neighbors:
+    172.31.128.1:
+      peer_group: MLAG-IPv4-UNDERLAY-PEER
+      description: leaf-2b
+    172.31.1.0:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65001'
+      description: spine-1_Ethernet3
+    172.31.1.2:
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65001'
+      description: spine-2_Ethernet3
+    1.1.1.1:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: spine-1
+      remote_as: '65001'
+    1.1.1.2:
+      peer_group: EVPN-OVERLAY-PEERS
+      description: spine-2
+      remote_as: '65001'
+  redistribute_routes:
+    connected:
+      route_map: RM-CONN-2-BGP
+  address_family_evpn:
+    peer_groups:
+      EVPN-OVERLAY-PEERS:
+        activate: true
+static_routes:
+- vrf: MGMT
+  destination_address_prefix: 0.0.0.0/0
+  gateway: 192.168.255.1
+service_routing_protocols_model: multi-agent
+ip_routing: true
+daemon_terminattr:
+  cvaddrs:
+  - cvp.lab.local:9910
+  cvauth:
+    method: key
+    key: arista
+  cvvrf: MGMT
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: false
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+name_server:
+  source:
+    vrf: MGMT
+  nodes:
+  - 192.168.255.110
+spanning_tree:
+  mode: mstp
+  mst_instances:
+    '0':
+      priority: 32768
+  no_spanning_tree_vlan: 4093-4094
+local_users:
+  admin:
+    privilege: 15
+    role: Administrator
+    sha512_password: $6$XiiRNgJOU/Yyz4Xk$rr8JTkAVL/fgU5rm0Bx1Qt0rbl.kN4IedmTzbdDbFe/DKvQHWWFYp6Ax1j4nWOCfgj.vI69VewFpYFeXjTnwt.
+  automator:
+    privilege: 15
+    role: network-admin
+    no_password: true
+    ssh_key: AAAAB3NzaC1yc2EAAAADAQABAAABgQC7prl32xxTUtfElkOxFO6DMwS9Jdkdv4KeK9R078Le30YK+xwmgkUZBcvEhZd5ddfcoJIOrUB44agRxGBDjykt1vnWY4lDQnhN6FeE5kbDhT9jIz7LCtf7zy+TFM4+2ugmRA7BooVhFBIlQGZXI67vwtx1JmjhS50jJIlDCf9nnSDCT2RfHyZnCu+B0NID4Z28nbYSerT/CMaJU0yyZA/Vk8dkKJQni0BFvBs/7O8YJV4yhjXXsXKK0iI74dtRnxgR6hiUvmhg5WR8VZgcECu0q1Uji91nYRTWOOyEjFQQsFcRREFG6lrNdLkCnPmwwC0mLi5BFAv5QzU4JRwnb5j+nluxjeib/iVn6uKmVG40Lb1ktnK8BqducOWBgnrwZzg+brfThBhqr6SVz20GWwwmIHsOrlgGxjbJEFmCdGD3BpklKTZ7UIzPLbzt80ZHg1xxuBGh07D/nS8k9qwm7v8bGup8JJzFbhb/wLK8Ykhs2I2dIKo3kFccVR9+20m+7YU=
+      arista@srvr2
+clock:
+  timezone: Denver
+vrfs:
+  MGMT:
+    ip_routing: false
+management_interfaces:
+  Management0:
+    description: oob_management
+    shutdown: false
+    vrf: MGMT
+    ip_address: 192.168.255.163/24
+    gateway: 192.168.255.1
+    type: oob
+management_api_http:
+  enable_vrfs:
+    MGMT: {}
+  enable_https: true
+vlans:
+  4093:
+    tenant: system
+    name: LEAF_PEER_L3
+    trunk_groups:
+    - LEAF_PEER_L3
+  4094:
+    tenant: system
+    name: MLAG_PEER
+    trunk_groups:
+    - MLAG
+vlan_interfaces:
+  Vlan4093:
+    description: MLAG_PEER_L3_PEERING
+    shutdown: false
+    ip_address: 172.31.128.0/31
+    mtu: 1500
+  Vlan4094:
+    description: MLAG_PEER
+    shutdown: false
+    ip_address: 172.31.255.0/31
+    no_autostate: true
+    mtu: 1500
+port_channel_interfaces:
+  Port-Channel11:
+    description: MLAG_PEER_leaf-2b_Po11
+    type: switched
+    shutdown: false
+    vlans: 2-4094
+    mode: trunk
+    trunk_groups:
+    - LEAF_PEER_L3
+    - MLAG
+ethernet_interfaces:
+  Ethernet11:
+    peer: leaf-2b
+    peer_interface: Ethernet11
+    peer_type: mlag_peer
+    description: MLAG_PEER_leaf-2b_Ethernet11
+    type: switched
+    shutdown: false
+    channel_group:
+      id: 11
+      mode: active
+  Ethernet12:
+    peer: leaf-2b
+    peer_interface: Ethernet12
+    peer_type: mlag_peer
+    description: MLAG_PEER_leaf-2b_Ethernet12
+    type: switched
+    shutdown: false
+    channel_group:
+      id: 11
+      mode: active
+  Ethernet1:
+    peer: spine-1
+    peer_interface: Ethernet3
+    peer_type: spine
+    description: P2P_LINK_TO_SPINE-1_Ethernet3
+    mtu: 1500
+    ptp:
+      enable: true
+    type: routed
+    shutdown: false
+    ip_address: 172.31.1.1/31
+  Ethernet2:
+    peer: spine-2
+    peer_interface: Ethernet3
+    peer_type: spine
+    description: P2P_LINK_TO_SPINE-2_Ethernet3
+    mtu: 1500
+    ptp:
+      enable: true
+    type: routed
+    shutdown: false
+    ip_address: 172.31.1.3/31
+mlag_configuration:
+  domain_id: RACK_2
+  local_interface: Vlan4094
+  peer_address: 172.31.255.1
+  peer_link: Port-Channel11
+  reload_delay_mlag: 300
+  reload_delay_non_mlag: 330
+route_maps:
+  RM-MLAG-PEER-IN:
+    sequence_numbers:
+      10:
+        type: permit
+        set:
+        - origin incomplete
+        description: Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
+  RM-CONN-2-BGP:
+    sequence_numbers:
+      10:
+        type: permit
+        match:
+        - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+loopback_interfaces:
+  Loopback0:
+    description: EVPN_Overlay_Peering
+    shutdown: false
+    ip_address: 1.1.1.11/32
+  Loopback1:
+    description: VTEP_VXLAN_Tunnel_Source
+    shutdown: false
+    ip_address: 2.2.2.11/32
+prefix_lists:
+  PL-LOOPBACKS-EVPN-OVERLAY:
+    sequence_numbers:
+      10:
+        action: permit 1.1.1.0/24 eq 32
+      20:
+        action: permit 2.2.2.0/24 eq 32
+router_bfd:
+  multihop:
+    interval: 1200
+    min_rx: 1200
+    multiplier: 3
+ip_igmp_snooping:
+  globally_enabled: true
+ip_virtual_router_mac_address: 00:1c:73:aa:bb:cc
+vxlan_interface:
+  Vxlan1:
+    description: leaf-2a_VTEP
+    vxlan:
+      source_interface: Loopback1
+      virtual_router_encapsulation_mac_address: mlag-system-id
+      udp_port: 4789

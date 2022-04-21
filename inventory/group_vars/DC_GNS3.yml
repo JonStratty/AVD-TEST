@@ -1,0 +1,125 @@
+---
+fabric_name: DC_GNS3
+
+# Enable vlan aware bundles
+evpn_vlan_aware_bundles: true
+# vxlan_vlan_aware_bundles: true  -> Outdated
+
+# bgp peer groups passwords
+bgp_peer_groups:
+  IPv4_UNDERLAY_PEERS:
+    password: "7x4B4rnJhZB438m9+BrBfQ=="
+  EVPN_OVERLAY_PEERS:
+    password: "7x4B4rnJhZB438m9+BrBfQ=="
+  MLAG_IPv4_UNDERLAY_PEER:
+    password: "7x4B4rnJhZB438m9+BrBfQ=="
+
+
+# Update p2p mtu 9000 -> 1500
+p2p_uplinks_mtu: 1500
+
+# Adjust default bfd values
+bfd_multihop:
+  interval: 1200
+  min_rx: 1200
+  multiplier: 3
+
+# Using the G_SPINES variable type 'spine'. See inventory.yml
+spine:
+  defaults:
+    platform: VEOS-LAB
+    bgp_as: 65001
+    loopback_ipv4_pool: 1.1.1.0/24
+    bgp_defaults:
+      - 'no bgp default ipv4-unicast'
+      - 'distance bgp 20 200 200'
+      - 'graceful-restart restart-time 300'
+      - 'graceful-restart'
+  nodes:
+    spine-1:
+      id: 1
+      mgmt_ip: 192.168.255.151/24
+    spine-2:
+      id: 2
+      mgmt_ip: 192.168.255.152/24
+l3leaf:
+  defaults:
+    platform: VEOS-LAB
+    virtual_router_mac_address: 00:1c:73:aa:bb:cc
+    # VTEP VXLAN Tunnel source loopback IP for leaf switches, assigned in /32s
+    # Assign range larger than total leaf switches
+    vtep_loopback_ipv4_pool: 2.2.2.0/24
+    loopback_ipv4_pool: 1.1.1.0/24
+    # Offset must be >= number of spines
+    loopback_ipv4_offset: 10
+    # Point to Point Network Summary range, assigned as /31 for each
+    # uplink interfaces
+    # Assign range larger than total [spines * total potential leafs * 2]
+    uplink_ipv4_pool: 172.31.1.0/24
+    uplink_switches: [spine-1, spine-2]
+    uplink_interfaces: [Ethernet1, Ethernet2]
+    uplink_ptp:
+     enable: true
+    mlag_interfaces: [Ethernet11, Ethernet12]
+    # mlag pair IP assignment - assign blocks - Assign range larger than
+    # total spines + total leafs switches
+    mlag_peer_ipv4_pool: 172.31.255.0/24
+    mlag_peer_l3_ipv4_pool: 172.31.128.0/24
+    spanning_tree_mode: mstp
+    bgp_defaults:
+      - 'no bgp default ipv4-unicast'
+      - 'distance bgp 20 200 200'
+      - 'graceful-restart restart-time 300'
+      - 'graceful-restart'
+  node_groups:
+    RACK_1:
+      bgp_as: 65101
+      nodes:
+        leaf-1a:
+          id: 1
+          mgmt_ip: 192.168.255.161/24
+          # Interface configured on SPINES to connect to this leaf
+          uplink_switch_interfaces: [Ethernet1, Ethernet1]
+        leaf-1b:
+          id: 2
+          mgmt_ip: 192.168.255.162/24
+          # Interface configured on SPINES to connect to this leaf
+          uplink_switch_interfaces: [Ethernet2, Ethernet2]
+    RACK_2:
+      bgp_as: 65102
+      nodes:
+        leaf-2a:
+          id: 1
+          mgmt_ip: 192.168.255.163/24
+          # Interface configured on SPINES to connect to this leaf
+          uplink_switch_interfaces: [Ethernet3, Ethernet3]
+        leaf-2b:
+          id: 2
+          mgmt_ip: 192.168.255.164/24
+          # Interface configured on SPINES to connect to this leaf
+          uplink_switch_interfaces: [Ethernet4, Ethernet4]
+    RACK_3:
+      bgp_as: 65103
+      nodes:
+        leaf-3a:
+          id: 1
+          mgmt_ip: 192.168.255.165/24
+          # Interface configured on SPINES to connect to this leaf
+          uplink_switch_interfaces: [Ethernet5, Ethernet5]
+    RACK_4:
+      bgp_as: 65104
+      nodes:
+        leaf-4a:
+          id: 1
+          mgmt_ip: 192.168.255.167/24
+          # Interface configured on SPINES to connect to this leaf
+          uplink_switch_interfaces: [Ethernet7, Ethernet7]
+    RACK_9:
+      bgp_as: 65109
+      nodes:
+        leaf-9a-SVC:
+          id: 1
+          mgmt_ip: 192.168.255.191/24
+          # Interface configured on SPINES to connect to this leaf
+          uplink_switch_interfaces: [Ethernet9, Ethernet9]
+

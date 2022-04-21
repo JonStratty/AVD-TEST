@@ -1,0 +1,21 @@
+---
+- name: Deploy created configs via eAPI
+  hosts: leaf-1a
+  connection: local
+  gather_facts: false
+  collections:
+    - arista.avd
+    - arista.cvp
+
+  tasks:
+
+    # EOS eAPI deploy
+    - name: deploy configuration via eAPI
+      import_role:
+         name: arista.avd.eos_config_deploy_eapi
+
+    # EOS eAPI state validation
+    - name: audit fabric state using EOS eAPI connection
+      import_role:
+         name: arista.avd.eos_validate_state
+

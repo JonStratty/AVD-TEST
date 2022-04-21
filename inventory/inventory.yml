@@ -1,0 +1,55 @@
+---
+GLOBAL:
+  children:
+    DC_GNS3:
+      vars:
+        ansible_connection: httpapi
+        ansible_user: admin
+        ansible_httpapi_password: password
+        ansible_network_os: eos
+        ansible_httpapi_use_ssl: True
+        ansible_httpapi_validate_certs: False
+        ansible_httpapi_port: 443
+        ansible_become: yes
+        ansible_become_method: enable
+        ansible_python_interpreter: /usr/bin/python3
+              
+      children:
+        G_SPINES:
+          vars:
+            # Must be either spine | l3leaf | l2leaf
+            type: spine
+          hosts:
+            spine-1:
+              ansible_host: 192.168.255.151
+            spine-2:
+              ansible_host: 192.168.255.152
+        G_LEAFS:
+          vars:
+            # Must be either spine | l3leaf | l2leaf
+            type: l3leaf
+          children:
+            RACK_1:
+              hosts:
+                leaf-1a:
+                  ansible_host: 192.168.255.161
+                leaf-1b:
+                  ansible_host: 192.168.255.161
+            RACK_2:
+              hosts:
+                leaf-2a:
+                  ansible_host: 192.168.255.163
+                leaf-2b:
+                  ansible_host: 192.168.255.164
+            RACK_3:
+              hosts:
+                leaf-3a:
+                  ansible_host: 192.168.255.165
+            RACK_4:
+              hosts:
+                leaf-4a:
+                  ansible_host: 192.168.255.167
+            RACK_9:
+              hosts:
+                leaf-9a-SVC:
+                  ansible_host: 192.168.255.191
