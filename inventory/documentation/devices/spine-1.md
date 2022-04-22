@@ -98,13 +98,13 @@ ip name-server vrf MGMT 192.168.255.110
 
 ### Clock Timezone Settings
 
-Clock Timezone is set to **Denver**.
+Clock Timezone is set to **America/Denver**.
 
 ### Clock Configuration
 
 ```eos
 !
-clock timezone Denver
+clock timezone America/Denver
 ```
 
 ## NTP
@@ -159,15 +159,12 @@ management api http-commands
 | User | Privilege | Role |
 | ---- | --------- | ---- |
 | admin | 15 | Administrator |
-| automator | 15 | network-admin |
 
 ### Local Users Device Configuration
 
 ```eos
 !
 username admin privilege 15 role Administrator secret sha512 $6$XiiRNgJOU/Yyz4Xk$rr8JTkAVL/fgU5rm0Bx1Qt0rbl.kN4IedmTzbdDbFe/DKvQHWWFYp6Ax1j4nWOCfgj.vI69VewFpYFeXjTnwt.
-username automator privilege 15 role network-admin nopassword
-username automator ssh-key AAAAB3NzaC1yc2EAAAADAQABAAABgQC7prl32xxTUtfElkOxFO6DMwS9Jdkdv4KeK9R078Le30YK+xwmgkUZBcvEhZd5ddfcoJIOrUB44agRxGBDjykt1vnWY4lDQnhN6FeE5kbDhT9jIz7LCtf7zy+TFM4+2ugmRA7BooVhFBIlQGZXI67vwtx1JmjhS50jJIlDCf9nnSDCT2RfHyZnCu+B0NID4Z28nbYSerT/CMaJU0yyZA/Vk8dkKJQni0BFvBs/7O8YJV4yhjXXsXKK0iI74dtRnxgR6hiUvmhg5WR8VZgcECu0q1Uji91nYRTWOOyEjFQQsFcRREFG6lrNdLkCnPmwwC0mLi5BFAv5QzU4JRwnb5j+nluxjeib/iVn6uKmVG40Lb1ktnK8BqducOWBgnrwZzg+brfThBhqr6SVz20GWwwmIHsOrlgGxjbJEFmCdGD3BpklKTZ7UIzPLbzt80ZHg1xxuBGh07D/nS8k9qwm7v8bGup8JJzFbhb/wLK8Ykhs2I2dIKo3kFccVR9+20m+7YU= arista@srvr2
 ```
 
 # Monitoring
