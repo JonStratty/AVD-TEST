@@ -38,10 +38,10 @@ spine:
   nodes:
     spine-1:
       id: 1
-      mgmt_ip: 192.168.255.151/24
+      mgmt_ip: 192.168.255.51/24
     spine-2:
       id: 2
-      mgmt_ip: 192.168.255.152/24
+      mgmt_ip: 192.168.255.52/24
 l3leaf:
   defaults:
     platform: VEOS-LAB
@@ -77,12 +77,12 @@ l3leaf:
       nodes:
         leaf-1a:
           id: 1
-          mgmt_ip: 192.168.255.161/24
+          mgmt_ip: 192.168.255.61/24
           # Interface configured on SPINES to connect to this leaf
           uplink_switch_interfaces: [Ethernet1, Ethernet1]
         leaf-1b:
           id: 2
-          mgmt_ip: 192.168.255.162/24
+          mgmt_ip: 192.168.255.62/24
           # Interface configured on SPINES to connect to this leaf
           uplink_switch_interfaces: [Ethernet2, Ethernet2]
     RACK_2:
@@ -90,12 +90,12 @@ l3leaf:
       nodes:
         leaf-2a:
           id: 1
-          mgmt_ip: 192.168.255.163/24
+          mgmt_ip: 192.168.255.63/24
           # Interface configured on SPINES to connect to this leaf
           uplink_switch_interfaces: [Ethernet3, Ethernet3]
         leaf-2b:
           id: 2
-          mgmt_ip: 192.168.255.164/24
+          mgmt_ip: 192.168.255.64/24
           # Interface configured on SPINES to connect to this leaf
           uplink_switch_interfaces: [Ethernet4, Ethernet4]
     RACK_3:
@@ -103,7 +103,7 @@ l3leaf:
       nodes:
         leaf-3a:
           id: 1
-          mgmt_ip: 192.168.255.165/24
+          mgmt_ip: 192.168.255.65/24
           # Interface configured on SPINES to connect to this leaf
           uplink_switch_interfaces: [Ethernet5, Ethernet5]
     RACK_4:
@@ -111,7 +111,7 @@ l3leaf:
       nodes:
         leaf-4a:
           id: 1
-          mgmt_ip: 192.168.255.167/24
+          mgmt_ip: 192.168.255.67/24
           # Interface configured on SPINES to connect to this leaf
           uplink_switch_interfaces: [Ethernet7, Ethernet7]
     RACK_9:
@@ -119,7 +119,7 @@ l3leaf:
       nodes:
         leaf-9a-SVC:
           id: 1
-          mgmt_ip: 192.168.255.191/24
+          mgmt_ip: 192.168.255.69/24
           # Interface configured on SPINES to connect to this leaf
           uplink_switch_interfaces: [Ethernet9, Ethernet9]
 

@@ -21,9 +21,9 @@ GLOBAL:
             type: spine
           hosts:
             spine-1:
-              ansible_host: 192.168.255.151
+              ansible_host: 192.168.255.51
             spine-2:
-              ansible_host: 192.168.255.152
+              ansible_host: 192.168.255.52
         G_LEAFS:
           vars:
             # Must be either spine | l3leaf | l2leaf
@@ -32,24 +32,24 @@ GLOBAL:
             RACK_1:
               hosts:
                 leaf-1a:
-                  ansible_host: 192.168.255.161
+                  ansible_host: 192.168.255.61
                 leaf-1b:
-                  ansible_host: 192.168.255.161
+                  ansible_host: 192.168.255.62
             RACK_2:
               hosts:
                 leaf-2a:
-                  ansible_host: 192.168.255.163
+                  ansible_host: 192.168.255.63
                 leaf-2b:
-                  ansible_host: 192.168.255.164
+                  ansible_host: 192.168.255.64
             RACK_3:
               hosts:
                 leaf-3a:
-                  ansible_host: 192.168.255.165
+                  ansible_host: 192.168.255.65
             RACK_4:
               hosts:
                 leaf-4a:
-                  ansible_host: 192.168.255.167
+                  ansible_host: 192.168.255.67
             RACK_9:
               hosts:
                 leaf-9a-SVC:
-                  ansible_host: 192.168.255.191
+                  ansible_host: 192.168.255.69

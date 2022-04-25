@@ -49,7 +49,7 @@
 
 | Management Interface | description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management0 | oob_management | oob | MGMT | 192.168.255.152/24 | 192.168.255.1 |
+| Management0 | oob_management | oob | MGMT | 192.168.255.52/24 | 192.168.255.1 |
 
 #### IPv6
 
@@ -65,7 +65,7 @@ interface Management0
    description oob_management
    no shutdown
    vrf MGMT
-   ip address 192.168.255.152/24
+   ip address 192.168.255.52/24
 ```
 
 ## DNS Domain
@@ -164,7 +164,7 @@ management api http-commands
 
 ```eos
 !
-username admin privilege 15 role Administrator secret sha512 $6$XiiRNgJOU/Yyz4Xk$rr8JTkAVL/fgU5rm0Bx1Qt0rbl.kN4IedmTzbdDbFe/DKvQHWWFYp6Ax1j4nWOCfgj.vI69VewFpYFeXjTnwt.
+username admin privilege 15 role Administrator secret sha512 $6$4wUpykmszPYagsWE$.F0bL5pjqhY5t5mLXop2Qsu5jmRRSIl/EpV6OOBbIZdtPeylCbxqcRGh1ChTwHUwID8ZzOiO9wfwf.1wa92wC0
 ```
 
 # Monitoring

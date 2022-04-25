@@ -86,7 +86,7 @@ local_users:
   admin:
     privilege: 15
     role: Administrator
-    sha512_password: $6$XiiRNgJOU/Yyz4Xk$rr8JTkAVL/fgU5rm0Bx1Qt0rbl.kN4IedmTzbdDbFe/DKvQHWWFYp6Ax1j4nWOCfgj.vI69VewFpYFeXjTnwt.
+    sha512_password: $6$4wUpykmszPYagsWE$.F0bL5pjqhY5t5mLXop2Qsu5jmRRSIl/EpV6OOBbIZdtPeylCbxqcRGh1ChTwHUwID8ZzOiO9wfwf.1wa92wC0
 clock:
   timezone: America/Denver
 vrfs:
@@ -97,7 +97,7 @@ management_interfaces:
     description: oob_management
     shutdown: false
     vrf: MGMT
-    ip_address: 192.168.255.167/24
+    ip_address: 192.168.255.67/24
     gateway: 192.168.255.1
     type: oob
 management_api_http:

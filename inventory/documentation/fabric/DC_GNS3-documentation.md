@@ -17,15 +17,15 @@
 
 | POD | Type | Node | Management IP | Platform | Provisioned in CloudVision |
 | --- | ---- | ---- | ------------- | -------- | -------------------------- |
-| DC_GNS3 | l3leaf | leaf-1a | 192.168.255.161/24 | VEOS-LAB | Provisioned |
-| DC_GNS3 | l3leaf | leaf-1b | 192.168.255.162/24 | VEOS-LAB | Provisioned |
-| DC_GNS3 | l3leaf | leaf-2a | 192.168.255.163/24 | VEOS-LAB | Provisioned |
-| DC_GNS3 | l3leaf | leaf-2b | 192.168.255.164/24 | VEOS-LAB | Provisioned |
-| DC_GNS3 | l3leaf | leaf-3a | 192.168.255.165/24 | VEOS-LAB | Provisioned |
-| DC_GNS3 | l3leaf | leaf-4a | 192.168.255.167/24 | VEOS-LAB | Provisioned |
-| DC_GNS3 | l3leaf | leaf-9a-SVC | 192.168.255.191/24 | VEOS-LAB | Provisioned |
-| DC_GNS3 | spine | spine-1 | 192.168.255.151/24 | VEOS-LAB | Provisioned |
-| DC_GNS3 | spine | spine-2 | 192.168.255.152/24 | VEOS-LAB | Provisioned |
+| DC_GNS3 | l3leaf | leaf-1a | 192.168.255.61/24 | VEOS-LAB | Provisioned |
+| DC_GNS3 | l3leaf | leaf-1b | 192.168.255.62/24 | VEOS-LAB | Provisioned |
+| DC_GNS3 | l3leaf | leaf-2a | 192.168.255.63/24 | VEOS-LAB | Provisioned |
+| DC_GNS3 | l3leaf | leaf-2b | 192.168.255.64/24 | VEOS-LAB | Provisioned |
+| DC_GNS3 | l3leaf | leaf-3a | 192.168.255.65/24 | VEOS-LAB | Provisioned |
+| DC_GNS3 | l3leaf | leaf-4a | 192.168.255.67/24 | VEOS-LAB | Provisioned |
+| DC_GNS3 | l3leaf | leaf-9a-SVC | 192.168.255.69/24 | VEOS-LAB | Provisioned |
+| DC_GNS3 | spine | spine-1 | 192.168.255.51/24 | VEOS-LAB | Provisioned |
+| DC_GNS3 | spine | spine-2 | 192.168.255.52/24 | VEOS-LAB | Provisioned |
 
 > Provision status is based on Ansible inventory declaration and do not represent real status from CloudVision.
 
