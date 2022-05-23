@@ -12,7 +12,7 @@ router_bgp:
       type: ipv4
       remote_as: '65101'
       next_hop_self: true
-      password: 7x4B4rnJhZB438m9+BrBfQ==
+      password: 4b21pAdCvWeAqpcKDFMdWw==
       maximum_routes: 12000
       send_community: all
       route_map_in: RM-MLAG-PEER-IN
@@ -26,7 +26,7 @@ router_bgp:
       update_source: Loopback0
       bfd: true
       ebgp_multihop: '3'
-      password: 7x4B4rnJhZB438m9+BrBfQ==
+      password: Q4fqtbqcZ7oQuKfuWtNGRQ==
       send_community: all
       maximum_routes: 0
   address_family_ipv4:
@@ -41,22 +41,6 @@ router_bgp:
     172.31.128.1:
       peer_group: MLAG-IPv4-UNDERLAY-PEER
       description: leaf-1b
-    172.31.1.0:
-      peer_group: IPv4-UNDERLAY-PEERS
-      remote_as: '65001'
-      description: spine-1_Ethernet1
-    172.31.1.2:
-      peer_group: IPv4-UNDERLAY-PEERS
-      remote_as: '65001'
-      description: spine-2_Ethernet1
-    1.1.1.1:
-      peer_group: EVPN-OVERLAY-PEERS
-      description: spine-1
-      remote_as: '65001'
-    1.1.1.2:
-      peer_group: EVPN-OVERLAY-PEERS
-      description: spine-2
-      remote_as: '65001'
   redistribute_routes:
     connected:
       route_map: RM-CONN-2-BGP
@@ -107,7 +91,7 @@ vrfs:
   MGMT:
     ip_routing: false
 management_interfaces:
-  Management0:
+  Management1:
     description: oob_management
     shutdown: false
     vrf: MGMT
@@ -172,28 +156,6 @@ ethernet_interfaces:
     channel_group:
       id: 11
       mode: active
-  Ethernet1:
-    peer: spine-1
-    peer_interface: Ethernet1
-    peer_type: spine
-    description: P2P_LINK_TO_SPINE-1_Ethernet1
-    mtu: 1500
-    ptp:
-      enable: true
-    type: routed
-    shutdown: false
-    ip_address: 172.31.1.1/31
-  Ethernet2:
-    peer: spine-2
-    peer_interface: Ethernet1
-    peer_type: spine
-    description: P2P_LINK_TO_SPINE-2_Ethernet1
-    mtu: 1500
-    ptp:
-      enable: true
-    type: routed
-    shutdown: false
-    ip_address: 172.31.1.3/31
 mlag_configuration:
   domain_id: RACK_1
   local_interface: Vlan4094

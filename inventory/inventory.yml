@@ -5,7 +5,7 @@ GLOBAL:
       vars:
         ansible_connection: httpapi
         ansible_user: admin
-        ansible_httpapi_password: password
+        ansible_httpapi_password: arista12
         ansible_network_os: eos
         ansible_httpapi_use_ssl: True
         ansible_httpapi_validate_certs: False

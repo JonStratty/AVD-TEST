@@ -34,5 +34,8 @@ cvp_instance_ip: cvp.lab.local
 cvp_ingestauth_key: 'arista'
 
 mgmt_gateway: 192.168.255.1
-mgmt_interface: Management0
+mgmt_interface: Management1
 mgmt_interface_vrf: MGMT
+management_interfaces:
+ Management1:
+  description: "Test this"

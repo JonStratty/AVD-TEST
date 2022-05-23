@@ -1,6 +1,6 @@
 ---
 - name: Manage Arista EOS EVPN/VXLAN Configuration
-  hosts: DC_GNS3
+  hosts: leaf-1a
   connection: local
   gather_facts: false
   collections:

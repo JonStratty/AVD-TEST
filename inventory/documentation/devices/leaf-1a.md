@@ -60,19 +60,19 @@
 
 | Management Interface | description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management0 | oob_management | oob | MGMT | 192.168.255.61/24 | 192.168.255.1 |
+| Management1 | oob_management | oob | MGMT | 192.168.255.61/24 | 192.168.255.1 |
 
 #### IPv6
 
 | Management Interface | description | Type | VRF | IPv6 Address | IPv6 Gateway |
 | -------------------- | ----------- | ---- | --- | ------------ | ------------ |
-| Management0 | oob_management | oob | MGMT | -  | - |
+| Management1 | oob_management | oob | MGMT | -  | - |
 
 ### Management Interfaces Device Configuration
 
 ```eos
 !
-interface Management0
+interface Management1
    description oob_management
    no shutdown
    vrf MGMT
@@ -297,32 +297,9 @@ vlan 4094
 
 *Inherited from Port-Channel Interface
 
-#### IPv4
-
-| Interface | Description | Type | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
-| --------- | ----------- | -----| ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_LINK_TO_SPINE-1_Ethernet1 | routed | - | 172.31.1.1/31 | default | 1500 | false | - | - |
-| Ethernet2 | P2P_LINK_TO_SPINE-2_Ethernet1 | routed | - | 172.31.1.3/31 | default | 1500 | false | - | - |
-
 ### Ethernet Interfaces Device Configuration
 
 ```eos
-!
-interface Ethernet1
-   description P2P_LINK_TO_SPINE-1_Ethernet1
-   no shutdown
-   mtu 1500
-   no switchport
-   ip address 172.31.1.1/31
-   ptp enable
-!
-interface Ethernet2
-   description P2P_LINK_TO_SPINE-2_Ethernet1
-   no shutdown
-   mtu 1500
-   no switchport
-   ip address 172.31.1.3/31
-   ptp enable
 !
 interface Ethernet11
    description MLAG_PEER_leaf-1b_Ethernet11
@@ -563,10 +540,6 @@ ip route vrf MGMT 0.0.0.0/0 192.168.255.1
 
 | Neighbor | Remote AS | VRF | Shutdown | Send-community | Maximum-routes | Allowas-in | BFD |
 | -------- | --------- | --- | -------- | -------------- | -------------- | ---------- | --- |
-| 1.1.1.1 | 65001 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS |
-| 1.1.1.2 | 65001 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS |
-| 172.31.1.0 | 65001 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - |
-| 172.31.1.2 | 65001 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - |
 | 172.31.128.1 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | default | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - |
 
 ### Router BGP EVPN Address Family
@@ -592,7 +565,7 @@ router bgp 65101
    neighbor EVPN-OVERLAY-PEERS update-source Loopback0
    neighbor EVPN-OVERLAY-PEERS bfd
    neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3
-   neighbor EVPN-OVERLAY-PEERS password 7 7x4B4rnJhZB438m9+BrBfQ==
+   neighbor EVPN-OVERLAY-PEERS password 7 Q4fqtbqcZ7oQuKfuWtNGRQ==
    neighbor EVPN-OVERLAY-PEERS send-community
    neighbor EVPN-OVERLAY-PEERS maximum-routes 0
    neighbor IPv4-UNDERLAY-PEERS peer group
@@ -602,22 +575,10 @@ router bgp 65101
    neighbor MLAG-IPv4-UNDERLAY-PEER peer group
    neighbor MLAG-IPv4-UNDERLAY-PEER remote-as 65101
    neighbor MLAG-IPv4-UNDERLAY-PEER next-hop-self
-   neighbor MLAG-IPv4-UNDERLAY-PEER password 7 7x4B4rnJhZB438m9+BrBfQ==
+   neighbor MLAG-IPv4-UNDERLAY-PEER password 7 4b21pAdCvWeAqpcKDFMdWw==
    neighbor MLAG-IPv4-UNDERLAY-PEER send-community
    neighbor MLAG-IPv4-UNDERLAY-PEER maximum-routes 12000
    neighbor MLAG-IPv4-UNDERLAY-PEER route-map RM-MLAG-PEER-IN in
-   neighbor 1.1.1.1 peer group EVPN-OVERLAY-PEERS
-   neighbor 1.1.1.1 remote-as 65001
-   neighbor 1.1.1.1 description spine-1
-   neighbor 1.1.1.2 peer group EVPN-OVERLAY-PEERS
-   neighbor 1.1.1.2 remote-as 65001
-   neighbor 1.1.1.2 description spine-2
-   neighbor 172.31.1.0 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.1.0 remote-as 65001
-   neighbor 172.31.1.0 description spine-1_Ethernet1
-   neighbor 172.31.1.2 peer group IPv4-UNDERLAY-PEERS
-   neighbor 172.31.1.2 remote-as 65001
-   neighbor 172.31.1.2 description spine-2_Ethernet1
    neighbor 172.31.128.1 peer group MLAG-IPv4-UNDERLAY-PEER
    neighbor 172.31.128.1 description leaf-1b
    redistribute connected route-map RM-CONN-2-BGP
